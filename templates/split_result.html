@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Split Results - E-PDF{% endblock %}
+
+{% block css %}
+<style>
+    .file-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .file-item:hover {
+        background-color: #f8f9fa;
+    }
+    .file-item.expanded {
+        background-color: #f8f9fa;
+        border-color: #0d6efd;
+    }
+    .preview-container {
+        height: 0;
+        visibility: hidden;
+        transition: height 0.3s ease-in-out;
+    }
+    .preview-container.show {
+        height: 650px;
+        visibility: visible;
+    }
+    .pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        margin-top: 1rem;
+        display: block;
+    }
+    .file-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+    .file-header i.bi-chevron-down {
+        transition: transform 0.3s ease;
+    }
+    .file-item.expanded .file-header i.bi-chevron-down {
+        transform: rotate(180deg);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center mb-0">Split PDF Results</h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="alert alert-success">
+                        <h5 class="alert-heading">PDF Split Successfully!</h5>
+                        <p>Your PDF has been split into the following files. Click on a file to preview:</p>
+                    </div>
+
+                    <div class="list-group mb-4">
+                        {% for file in split_files %}
+                        <div class="list-group-item file-item" onclick="togglePreview(this, '{{ file.filename }}')">
+                            <div class="file-header">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-chevron-down me-2"></i>
+                                    <h6 class="mb-0">{{ file.filename }}</h6>
+                                </div>
+                                <a href="{{ url_for('download_file', filename=file.filename) }}" 
+                                   class="btn btn-primary btn-sm"
+                                   onclick="event.stopPropagation();">
+                                    <i class="bi bi-download"></i> Download
+                                </a>
+                            </div>
+                            <div id="preview-{{ file.filename }}" class="preview-container">
+                                <iframe src="/static/uploads/{{ file.filename }}" 
+                                        class="pdf-viewer" 
+                                        title="PDF Viewer"></iframe>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-2">Back to Home</a>
+                        <a href="{{ url_for('split_pdf') }}" class="btn btn-primary">
+                            <i class="bi bi-file-earmark-text"></i> Split Another PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePreview(element, filename) {
+    const previewContainer = document.getElementById(`preview-${filename}`);
+    const allItems = document.getElementsByClassName('file-item');
+    const allPreviews = document.getElementsByClassName('preview-container');
+    
+    // Close all other previews
+    for (let item of allItems) {
+        if (item !== element) {
+            item.classList.remove('expanded');
+        }
+    }
+    for (let preview of allPreviews) {
+        if (preview !== previewContainer) {
+            preview.classList.remove('show');
+        }
+    }
+    
+    // Toggle current preview
+    element.classList.toggle('expanded');
+    previewContainer.classList.toggle('show');
+}
+</script>
+{% endblock %}

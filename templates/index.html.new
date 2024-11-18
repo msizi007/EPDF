@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}E-PDF - Your PDF Tools{% endblock %}
+
+{% block css %}
+<style>
+    .header {
+        text-align: center;
+        padding: 3rem 0;
+        background-color: #f8f9fa;
+        margin-bottom: 2rem;
+    }
+    .features {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .feature-item {
+        padding: 2rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        height: 100%;
+    }
+    .feature-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #0d6efd;
+    }
+    .feature-btn {
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="header">
+        <h1 class="display-5 mb-0">E-PDF</h1>
+        <p class="lead mt-0">Your complete PDF toolkit</p>
+    </section>
+
+    <div class="row features">
+        <div class="col-md-4 mb-4">
+            <div class="feature-item">
+                <i class="bi bi-file-pdf feature-icon"></i>
+                <h3>Read PDF</h3>
+                <p>Open and view your PDF files with ease</p>
+                <a href="{{ url_for('read_pdf') }}" class="btn btn-primary feature-btn">
+                    <i class="bi bi-file-pdf"></i> Read PDF
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-item">
+                <i class="bi bi-file-earmark-plus feature-icon"></i>
+                <h3>Merge PDFs</h3>
+                <p>Combine multiple PDF files into one</p>
+                <a href="{{ url_for('merge_pdf') }}" class="btn btn-primary feature-btn">
+                    <i class="bi bi-file-earmark-plus"></i> Merge PDFs
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-item">
+                <i class="bi bi-file-earmark-text feature-icon"></i>
+                <h3>Split PDF</h3>
+                <p>Split a PDF into individual files</p>
+                <a href="{{ url_for('split_pdf') }}" class="btn btn-primary feature-btn">
+                    <i class="bi bi-file-earmark-text"></i> Split PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
