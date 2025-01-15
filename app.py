@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory
 import fitz  # PyMuPDF
 from datetime import datetime
@@ -8,7 +8,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Required for flash messages
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
+uploads_folder = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
+app.config['UPLOAD_FOLDER'] = uploads_folder
 
 # Constants
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'temp')
@@ -18,8 +19,14 @@ os.makedirs(FILE_PATH, exist_ok=True)
 UPLOAD_PATH = app.config['UPLOAD_FOLDER']
 os.makedirs(UPLOAD_PATH, exist_ok=True)
 
+def clean_data():
+    shutil.rmtree(uploads_folder)
+    os.mkdir(uploads_folder)
+
+
 @app.route('/')
 def index():
+    clean_data()
     return render_template('index.html')
 
 @app.route('/read')
@@ -28,6 +35,7 @@ def read_pdf():
 
 @app.route('/read', methods=['POST'])
 def read_pdf_post():
+
     if 'file' not in request.files:
         flash('No file uploaded', 'error')
         return redirect(url_for('read_pdf'))
@@ -76,6 +84,7 @@ def merge_pdf_post():
     try:
         # Merge PDFs and get information
         result = merge_pdfs(files, UPLOAD_PATH)
+
         
         return render_template('view_pdf.html',
             filename=result['filename'],
