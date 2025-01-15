@@ -17,10 +17,9 @@ os.makedirs(FILE_PATH, exist_ok=True)
 
 # Create uploads directory for viewing PDFs
 UPLOAD_PATH = app.config['UPLOAD_FOLDER']
-os.makedirs(UPLOAD_PATH, exist_ok=True)
 
 def clean_data():
-    shutil.rmtree(uploads_folder)
+    os.removedirs(uploads_folder)
     os.mkdir(uploads_folder)
 
 
