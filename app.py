@@ -12,7 +12,7 @@ uploads_folder = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
 app.config['UPLOAD_FOLDER'] = uploads_folder
 
 # Constants
-FILE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'temp')
+FILE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 os.makedirs(FILE_PATH, exist_ok=True)
 
 # Create uploads directory for viewing PDFs
