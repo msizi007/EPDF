@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.min.css') }}">
     {% block css %}{% endblock %}
+    <style>
+        body{
+            background-repeat: repeat;           /* Repeats the pattern */
+            background-size: auto;               /* Keeps original size (prevents zoom/stretch) */
+            background-position: top left;       /* Aligns to top-left */
+            background-attachment: scroll;
+            background-size: 0.5rem;
+            background-image: url({{ url_for('static', filename='imgs/background.png') }});
+            
+        }
+    </style>
 </head>
 <body>
     {% block content %}{% endblock %}

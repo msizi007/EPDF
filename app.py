@@ -19,7 +19,7 @@ os.makedirs(FILE_PATH, exist_ok=True)
 UPLOAD_PATH = app.config['UPLOAD_FOLDER']
 
 def clean_data():
-    os.removedirs(uploads_folder)
+    shutil.rmtree(uploads_folder)
     os.mkdir(uploads_folder)
 
 
@@ -36,12 +36,12 @@ def read_pdf():
 def read_pdf_post():
 
     if 'file' not in request.files:
-        flash('No file uploaded', 'error')
+        flash('No file uploaded', 'danger')
         return redirect(url_for('read_pdf'))
 
     pdf_file = request.files['file']
     if not pdf_file.filename.lower().endswith('.pdf'):
-        flash('Please upload a PDF file', 'error')
+        flash('Please upload a PDF file', 'danger')
         return redirect(url_for('read_pdf'))
 
     try:
@@ -62,7 +62,7 @@ def read_pdf_post():
     except Exception as e:
         if os.path.exists(view_filepath):
             os.remove(view_filepath)
-        flash(str(e), 'error')
+        flash(str(e), 'danger')
         return redirect(url_for('read_pdf'))
 
 @app.route('/merge')
@@ -72,12 +72,12 @@ def merge_pdf():
 @app.route('/merge', methods=['POST'])
 def merge_pdf_post():
     if 'files[]' not in request.files:
-        flash('No files uploaded', 'error')
+        flash('No files uploaded', 'danger')
         return redirect(url_for('merge_pdf'))
 
     files = request.files.getlist('files[]')
     if not files or len(files) < 2:
-        flash('Please upload at least 2 PDF files', 'error')
+        flash('Please upload at least 2 PDF files', 'danger')
         return redirect(url_for('merge_pdf'))
 
     try:
@@ -94,7 +94,7 @@ def merge_pdf_post():
         )
 
     except Exception as e:
-        flash(str(e), 'error')
+        flash(str(e), 'danger')
         return redirect(url_for('merge_pdf'))
 
 @app.route('/split_pdf', methods=['GET', 'POST'])
@@ -174,7 +174,7 @@ def split_pdf():
 def view_pdf(filename):
     file_path = os.path.join(UPLOAD_PATH, filename)
     if not os.path.exists(file_path):
-        flash('File not found', 'error')
+        flash('File not found', 'danger')
         return redirect(url_for('index'))
     
     try:
@@ -190,7 +190,7 @@ def view_pdf(filename):
             current_pdf=f'/static/uploads/{filename}'
         )
     except Exception as e:
-        flash(str(e), 'error')
+        flash(str(e), 'danger')
         return redirect(url_for('index'))
 
 @app.route('/download/<filename>')
@@ -198,4 +198,4 @@ def download_file(filename):
     return send_from_directory(UPLOAD_PATH, filename, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5080)

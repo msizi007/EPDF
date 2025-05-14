@@ -22,11 +22,17 @@
                         {% endif %}
                     {% endwith %}
 
-                    <form method="POST" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="files" class="form-label">Select PDF Files to Merge</label>
-                            <input type="file" name="files[]" id="files" accept=".pdf" class="form-control" required multiple>
-                            <small class="text-muted">Select multiple PDF files to merge them in order</small>
+                    <form method="POST" enctype="multipart/form-data" id="mergeForm">
+                        <div id="file-inputs">
+                            <div class="mb-3 file-input-group">
+                                <label for="files" class="form-label">Select PDF File</label>
+                                <input type="file" name="files[]" accept=".pdf" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 text-end">
+                            <button type="button" class="btn btn-success btn-md" id="addFileBtn">
+                                <i class="bi bi-plus-circle"></i> Add PDF
+                            </button>
                         </div>
                         <div class="text-center">
                             <a href="{{ url_for('index') }}" class="btn btn-secondary me-2">Back</a>
@@ -40,4 +46,19 @@
         </div>
     </div>
 </div>
+
+<script>
+// Add another file input dynamically
+document.getElementById('addFileBtn').addEventListener('click', function () {
+    const container = document.getElementById('file-inputs');
+    const newInputGroup = document.createElement('div');
+    newInputGroup.className = 'mb-3 file-input-group';
+
+    newInputGroup.innerHTML = `
+        <input type="file" name="files[]" accept=".pdf" class="form-control" required>
+    `;
+
+    container.appendChild(newInputGroup);
+});
+</script>
 {% endblock %}
