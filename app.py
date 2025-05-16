@@ -36,7 +36,7 @@ def index():
 @app.route("/pdf")
 def serve_pdf():
     TEMP.seek(0)
-    return send_file(TEMP, mimetype='application/pdf', as_attachment=False, download_name='inline.pdf')
+    return send_file(TEMP, mimetype='pdf', as_attachment=False, download_name='result.pdf')
 
 
 
