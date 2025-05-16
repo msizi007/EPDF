@@ -42,6 +42,8 @@ def serve_pdf():
 
 @app.route('/read', methods=['GET', 'POST'])
 def read_pdf():
+    global TEMP
+    TEMP = BytesIO()
 
     if request.method == 'POST':
         print('post method...')
@@ -89,6 +91,8 @@ def read_pdf():
 
 @app.route('/merge', methods=['GET', 'POST'])
 def merge_pdf():
+    global TEMP
+    TEMP = BytesIO()
 
     if request.method == "POST":
         if 'files[]' not in request.files:
@@ -123,6 +127,8 @@ def merge_pdf():
 
 @app.route('/split_pdf', methods=['GET', 'POST'])
 def split_pdf():
+    global TEMP
+    TEMP = BytesIO()
     if request.method == 'POST':
         if 'pdf_file' not in request.files:
             flash('No file selected', 'danger')
